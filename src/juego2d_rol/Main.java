@@ -8,6 +8,7 @@ public class Main {
         
         
         Juego2d_rol juego = new Juego2d_rol();
+        juego.iniciar();
         
         
     }

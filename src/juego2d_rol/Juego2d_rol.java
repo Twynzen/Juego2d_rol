@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 
-public class Juego2d_rol extends Canvas {
+public class Juego2d_rol extends Canvas implements Runnable{
 private static final long serialVersionUID = 1L;
 
 private static final int ANCHO = 800;
@@ -17,6 +17,7 @@ private static final int LARGO = 600; //Tamaño de la ventana
 private static final String NOMBRE = "Juego"; // Nombre de la ventana
 
 private static JFrame ventana;
+private static Thread thread; //Creamos un thread para el procesador
 
 public Juego2d_rol(){
     setPreferredSize(new Dimension(ANCHO, LARGO));
@@ -32,6 +33,20 @@ public Juego2d_rol(){
     
    
 } 
+
+   
+    public void iniciar(){
+        thread = new Thread(this, "Graficos"); //aquí definimos donde se inicia y cómo se llama el thread
+        thread.start();//aquí iniciamos el thread un espacio en proceso de memoria
+    }
+    private void detener(){
+        
+    }
+
+    @Override
+    public void run() {
+        System.out.println("El thread graficos se inicia con exito");
+    }
 
 
 }
