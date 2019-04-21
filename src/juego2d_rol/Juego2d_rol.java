@@ -4,6 +4,8 @@ package juego2d_rol;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
@@ -13,6 +15,8 @@ private static final long serialVersionUID = 1L;
 
 private static final int ANCHO = 800;
 private static final int LARGO = 600; //Tamaño de la ventana
+
+private static volatile boolean enFuncionamiento = false; //se agrega el volatile para que la variable no pueda ser usada por2 threads al tiempo
 
 private static final String NOMBRE = "Juego"; // Nombre de la ventana
 
@@ -35,17 +39,27 @@ public Juego2d_rol(){
 } 
 
    
-    public void iniciar(){
+    public synchronized void iniciar(){ //synchronized para que se sincronice el thread al momento de ser procesado
+        enFuncionamiento = true;
+        
         thread = new Thread(this, "Graficos"); //aquí definimos donde se inicia y cómo se llama el thread
         thread.start();//aquí iniciamos el thread un espacio en proceso de memoria
     }
-    private void detener(){
-        
+    private synchronized void detener(){
+    
+        enFuncionamiento = false;
+     try {   
+        thread.join(); //espera a que el thread temrine lo que hace y luego lo de tiene
+    } catch (InterruptedException e) {
+        e.printStackTrace(); //ayuda a ver el posible error en consola por el thread.join
     }
+   }
 
     @Override
     public void run() {
-        System.out.println("El thread graficos se inicia con exito");
+        while (enFuncionamiento){
+            
+        }
     }
 
 
