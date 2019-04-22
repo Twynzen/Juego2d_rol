@@ -20,6 +20,9 @@ private static volatile boolean enFuncionamiento = false; //se agrega el volatil
 
 private static final String NOMBRE = "Juego"; // Nombre de la ventana
 
+private static int aps = 0;
+private static int fps = 0;
+
 private static JFrame ventana;
 private static Thread thread; //Creamos un thread para el procesador
 
@@ -54,10 +57,49 @@ public Juego2d_rol(){
         e.printStackTrace(); //ayuda a ver el posible error en consola por el thread.join
     }
    }
-
+    public void actualizar(){//Datos, variables estadisticas del juego 
+        aps++;
+    }
+   
+    private void mostrar(){ //pinta los graficos del juego
+        fps++;
+    }
+    
+    
+    
     @Override
     public void run() {
+        final int NS_POR_SEGUNDO =1000000000; //nanosegundos de un segundo
+        final byte APS_OBJETIVO = 60; //Las actualizaciones que queremos llevar por segundo
+        final double NS_POR_ACTUALIZACION = NS_POR_SEGUNDO / APS_OBJETIVO;
+        
+        long referenciaActualizacion = System.nanoTime(); //se atribuye una cantidad de tiempo en nanosegundos
+        long referenciaContador = System.nanoTime();
+        double  tiempoTranscurrido;
+        double delta = 0 ; //delta es la cantidad de tiempo que pasa hasta que se actualiza
+        
+        System.nanoTime();//mide de el tiempo segun los ciclos de relog del micro-procesador 1.5version
         while (enFuncionamiento){
+            final long inicioBucle = System.nanoTime();
+            
+            tiempoTranscurrido = inicioBucle - referenciaActualizacion;//acciona la medición de la actualizacion
+            referenciaActualizacion = inicioBucle; // mide el cambio entre el cada referencia de actualización
+            
+            delta += tiempoTranscurrido / NS_POR_ACTUALIZACION;
+            
+            while(delta>=1){ //Se encarga de repetir el proceso
+                actualizar(); 
+                delta--;
+            }
+            
+            
+            mostrar();
+            if(System.nanoTime()-referenciaContador > NS_POR_SEGUNDO){
+                ventana.setTitle(NOMBRE + " || APS: " + aps +" || FPS: "+ fps);
+                aps=0;
+                fps=0;
+                referenciaContador = System.nanoTime();
+            }
             
         }
     }
