@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 public class Hojasprites {
     
-    final int ancho;
-    final int alto;
+    private final int ancho;
+    private final int alto;
     public final int [] pixeles;
 
     public Hojasprites(final String ruta, int ancho, int alto)  {
@@ -27,9 +27,15 @@ public class Hojasprites {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
-        
-        
+     
+    }
+
+    public int getAncho() {
+        return ancho;
+    }
+
+    public int getAlto() {
+        return alto;
     }
     
 
