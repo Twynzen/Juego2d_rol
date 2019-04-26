@@ -1,6 +1,7 @@
 
 package juego2d_rol;
 
+import control.Teclado;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -25,10 +26,13 @@ private static int fps = 0;
 
 private static JFrame ventana;
 private static Thread thread; //Creamos un thread para el procesador
+private static Teclado teclado;
 
 public Juego2d_rol(){
     setPreferredSize(new Dimension(ANCHO, LARGO));
     
+    teclado = new Teclado();
+    addKeyListener(teclado);//pedimos que detecte todo lo que se utilice en esta clase por teclado
     ventana = new JFrame();
     ventana.setDefaultCloseOperation(EXIT_ON_CLOSE); 
     ventana.setResizable(false);
@@ -58,6 +62,20 @@ public Juego2d_rol(){
     }
    }
     public void actualizar(){//Datos, variables estadisticas del juego 
+        teclado.actualizar();
+        if(teclado.arriba){
+            System.out.println("Arriba");
+        }
+        if (teclado.abajo) {
+            System.out.println("Abajo");
+        }
+        if (teclado.izquierda) {
+            System.out.println("Izquierda");
+        }
+        if (teclado.derecha) {
+            System.out.println("Derecha");
+        }
+        
         aps++;
     }
    
@@ -77,6 +95,9 @@ public Juego2d_rol(){
         long referenciaContador = System.nanoTime();
         double  tiempoTranscurrido;
         double delta = 0 ; //delta es la cantidad de tiempo que pasa hasta que se actualiza
+        
+        requestFocus();
+        
         
         System.nanoTime();//mide de el tiempo segun los ciclos de relog del micro-procesador 1.5version
         while (enFuncionamiento){
